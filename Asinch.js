@@ -1,24 +1,24 @@
 var butQuote = document.getElementById("butQuote");
-var ListQuote = document.getElementsByClassName("ListQuote")[0];
+var listQuote = document.getElementsByClassName("listQuote")[0];
 
-var ElementReq = new XMLHttpRequest();
+var elementReq = new XMLHttpRequest();
 
 
 //Проверка на корректность получения данных 
-function StateList() {
-	if (ElementReq.readyState == 4) {
-		var status = ElementReq.status;
+function stateList() {
+	if (elementReq.readyState == 4) {
+		var status = elementReq.status;
 		if (status != 200) {
-				ListQuote.innerHTML = "Ошибка. Данные не получить";
+				listQuote.innerHTML = "Ошибка. Данные не получить";
 				
 		} 
 		else {
 			//извлекаем данные
-			data = JSON.parse(ElementReq.responseText);	
+			data = JSON.parse(elementReq.responseText);	
 			
 			//если извличение не произошло
 			if (!data){
-				ListQuote.innerHTML = "Ошибка. Данные не получить";
+				listQuote.innerHTML = "Ошибка. Данные не получить";
 			}
 			else{
 			//формируем результат
@@ -30,16 +30,16 @@ function StateList() {
 
 //Асинхронный вызов
 function asinchRequest(){
-	ElementReq.onload = StateList;								
-	ElementReq.open("GET", "https://favqs.com/api/qotd", true);
-	ElementReq.send();
+	elementReq.onload = stateList;								
+	elementReq.open("GET", "https://favqs.com/api/qotd", true);
+	elementReq.send();
 }
 
 function formRes(data){
 	//поэтапное обращение к JSON
 	var quote = data["quote"]
 	//вывод данных через параграфы
-	ListQuote.innerHTML = "<p>"
+	listQuote.innerHTML = "<p>"
 	+  'Автор: ' + quote["author"] + "</p>"
 	+"<p>" + 'Цитата: ' + quote["body"] + "</p>";
 }
