@@ -84,27 +84,7 @@
 						
 							<fieldset>
 							<legend style = "font-style: italic" >  Рацион красных панд  </legend>
-								<form method="post" action="http://localhost/inp/chek">
-									<p>
-										<input type="checkbox" id="bamboo" name="bamboo" checked> Бамбук
-									</p>
-									<p>
-										<input type="checkbox" id="redpand" name="redpand" checked> Других красных панд
-									</p>
-									<p>
-										<input type="checkbox" id="fruits" name="fruits" > Фрукты
-									</p>
-									<p>
-										<input type="checkbox" id="veg" name="veg"> Овощи
-									</p>
-									<p>
-										<input type="checkbox" id="grass" name="grass"> Травы
-									</p>
-									<p>
-										<input type="submit" value="Ввести">
-									</p>
-								
-								</form>
+								<div id = "eatForm"> </div>
 							</fieldset>
 						
 							<fieldset>
@@ -166,7 +146,7 @@
 					<div>
 						<button style ="color: red; font-size: 18px" id="butQuote" >Получить цитату</button>
 					</div>
-					<div style = "font-size: 24px" class="ListQuote">
+					<div style = "font-size: 24px" id="listQuote">
 					</div>
 					<script src = "Asinch.js"></script>
 				</nav>
@@ -192,21 +172,32 @@
 				super(props);
 				
 				this.state = {
-					where: ''
+					whereValue: 0,
+					whereValues: [
+						'Северная Америка',
+						'Южная Америка',
+						'Азия',
+						'Африка'
+					]
 				};
 				
 				this.handleChange = this.handleChange.bind(this);
+				this.handleSelectChange = this.handleSelectChange.bind(this);
 				this.handleSubmit = this.handleSubmit.bind(this);
 			}
 			
 			
 			handleSubmit(event){
 				alert(
-					'Где живут красные панды: ' + this.state.where
+					'Где живут панды: ' + this.state.whereValues[this.state.whereValue]
 				);
 				
 				
 				event.preventDefault();
+			}
+			
+			handleSelectChange(event) {
+				this.setState({whereValue: event.target.value});
 			}
 			
 			
@@ -218,17 +209,17 @@
 			}
 			
 			render() {
+				//Формируем в цикле набор из тегов <option>:
+				const options = this.state.whereValues.map((item, index) => {
+					return <option key={index} value={index}>{item}</option>;
+				});
 				return (
 					<form onSubmit={this.handleSubmit}>
-						<select name='where' value={this.state.notEnoughValue}  onChange={this.handleChange}>
-							<option value=''>посмотреть варианты...</option>
-							<option value="Азия">Азия</option>
-							<option value="Северная Америка">Северная Америка</option>
-							<option value="Южная Амирика">Южная Амирика</option>
-							<option value="Африка">Африка</option>					
+						<select id ='whereValue' name='whereValue' value={this.state.whereValue}  onChange={this.handleChange}>
+										{options}
 						</select>
 						<div>
-							<input type='submit' value="Отправить ответ"/>
+							<input type='submit'  value="Отправить ответ"/>
 						</div>
 					</form>
 					);
@@ -244,21 +235,32 @@
 				super(props);
 				
 				this.state = {
-					age: ''
+					ageValue: 0,
+					ageValues:[
+						'8 лет',
+						'34 года',
+						'89 лет',
+						'18,5 года'
+					]
 				};
 				
 				this.handleChange = this.handleChange.bind(this);
+				this.handleSelectChange = this.handleSelectChange.bind(this);
 				this.handleSubmit = this.handleSubmit.bind(this);
 			}
 			
 			
 			handleSubmit(event){
 				alert(
-					'Сколько лет живут красные падны: ' + this.state.age
+					'Сколько лет живут красные падны: ' + this.state.ageValues[this.state.ageValue]
 				);
 				
 				
 				event.preventDefault();
+			}
+			handleSelectChange(event) {
+				event.target.checked = true;
+				this.setState({ageValue: event.target.value});
 			}
 			
 			
@@ -270,24 +272,25 @@
 			}
 			
 			render() {
+				//Формируем в цикле набор из тегов <option>:
+				const options = this.state.ageValues.map((item, index) => {
+					return <option key={index} value={index}>{item}</option>;
+				});
+				const radios = this.state.ageValues.map((item, index) => {
+				return <div><input 	type='radio'
+									name = "ageValue"
+									value={index}
+									onChange={this.handleSelectChange}
+							/> {item}
+						</div>;
+						});
 				return (
 					<form onSubmit={this.handleSubmit}>
-						<p>
-							<input type="radio" value="8" name="age" checked={this.state.age === '8'}
-										onChange={this.handleChange}/> 8 лет
-						</p>
-						<p>
-							<input type="radio" value="34" name="age" checked={this.state.age === '34'}
-										onChange={this.handleChange}/> 34 года
-						</p>
-						<p>
-							<input type="radio" value="89" name="age" checked checked={this.state.age === '89'}
-										onChange={this.handleChange}/> 89 лет
-						</p>
-						<p>
-							<input type="radio" value="18,5" name="age" checked={this.state.age === '18,5'}
-										onChange={this.handleChange}/> 18,5 лет
-						</p>
+						
+							<p>
+								{radios}
+							</p>
+						
 						<div>
 							<input type='submit'  value="Отправить ответ"/>
 						</div>
@@ -296,5 +299,97 @@
 				}
 		}			
 		ReactDOM.render(<ManagedComponent1 />, document.getElementById("ageForm"));
+	</script>
+	
+		<script type="text/babel">
+		/* Пример реализации управляемого компонента */
+		class ManagedComponent2 extends React.Component {
+			constructor(props){
+				super(props);
+				this.state = {
+					eatDic:
+				[
+					{name: 'Бамбук',
+					checked: false,
+					},
+					{
+					name: 'Других красных панд',
+					checked: false,
+					},
+					{
+					name: 'Фрукты',
+					checked: false,
+					},
+					{
+					name: 'Овощи',
+					checked: false,
+					},
+					{
+					name: 'Травы',
+					checked: false,
+					}
+				]
+				};
+				
+				this.handleChange = this.handleChange.bind(this);
+				this.handleChangeCheckbox = this.handleChangeCheckbox.bind(this);
+				this.handleSubmit = this.handleSubmit.bind(this);
+			}
+			
+			
+			handleSubmit(event){
+				var val = ""; 
+				this.state.eatDic.forEach(item =>
+				{
+					if (item['checked'])
+						val+=item['name'] + '\n';
+				});
+				alert(val);
+				
+				
+				
+				event.preventDefault();
+			}
+			handleChangeCheckbox(event) {
+				const {value, checked} = event.target;
+				this.setState(beforeState => {
+					beforeState.eatDic[value]['checked'] = checked;
+					return beforeState;
+				});
+			}
+			
+			
+			handleChange(event) {
+				const {name, value} = event.target
+				this.setState({
+					[name]: value
+				})
+			}
+			
+			render() {
+				
+				const checkBoxes = this.state.eatDic.map((item, index) => {
+					var a = item;
+					var b = index;
+					var c = item['name'];
+					return <div><input type='checkbox' value={index}
+									onChange={this.handleChangeCheckbox}/>{item['name']}</div>
+
+					});
+				return (
+					<form onSubmit={this.handleSubmit}>
+						
+							<p>
+								{checkBoxes}
+							</p>
+						
+						<div>
+							<input type='submit'  value="Отправить ответ"/>
+						</div>
+					</form>
+					);
+				}
+		}			
+		ReactDOM.render(<ManagedComponent2 />, document.getElementById("eatForm"));
 	</script>
 </html>
