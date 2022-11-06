@@ -1,5 +1,5 @@
 var butQuote = document.getElementById("butQuote");
-var listQuote = document.getElementsByClassName("listQuote")[0];
+var listQuote = document.getElementById("listQuote");
 
 var elementReq = new XMLHttpRequest();
 
@@ -39,9 +39,7 @@ function formRes(data){
 	//поэтапное обращение к JSON
 	var quote = data["quote"]
 	//вывод данных через параграфы
-	listQuote.innerHTML = "<p>"
-	+  'Автор: ' + quote["author"] + "</p>"
-	+"<p>" + 'Цитата: ' + quote["body"] + "</p>";
+	listQuote.innerHTML = "<p>" +  'Автор: ' + quote["author"] + "</p>" +"<p>" + 'Цитата: ' + quote["body"] + "</p>";
 }
 
 
